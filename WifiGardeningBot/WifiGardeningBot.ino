@@ -14,10 +14,11 @@
 #define SENSOR_SWITCH         D5
 #define PUMP                  D6
 #define N_READINGS            2
-#define SLEEP_TIME            (60e6 * 60) // 1 hour (max allowed is 71 mins)
+#define SKIP_TIMES            4           //
+#define SLEEP_TIME            (62e6 * 60) // 1 hour (max allowed is 71 mins)
 #define TELEGRAM_MAX_ATTEMPTS 4
 #define WATERING_TIME         40 // secs
-#define MOISTURE_THRESHOLD    30
+#define MOISTURE_THRESHOLD    25
 
 // SSL client needed for both libraries
 WiFiClientSecure client;
@@ -34,15 +35,61 @@ struct {
   uint8_t padding;  // 1 byte,  12 in total
 } rtcData;
 
+// NVM Data
+#define RTCMemOffset 64 // arbitrary location
+
+struct {
+  uint32_t crc32;
+  int wakeCount;
+} sleepMemory;
+
 void setup() {
+
+#if DEBUG
+  Serial.begin(115200);
+#endif
 
   // turn off wifi
   WiFi.mode( WIFI_OFF );
   WiFi.forceSleepBegin();
   delay( 1 );
 
+#if 0
+  if(ESP.rtcUserMemoryRead((uint32_t) RTCMemOffset, (uint32_t*) &sleepMemory, sizeof(sleepMemory))) {
+
+    uint32_t crc = calculateCRC32( ((uint8_t*)&sleepMemory) + 4, sizeof( sleepMemory ) - 4 );
+ 
+    if( crc == sleepMemory.crc32 )
+      sleepMemory.wakeCount += 1;
+    else  
+      sleepMemory.wakeCount = SKIP_TIMES;   
+  
+  } else
+    sleepMemory.wakeCount = SKIP_TIMES;
+
 #if DEBUG
-  Serial.begin(115200);
+  Serial.println();
+  Serial.println(sleepMemory.wakeCount);
+#endif
+
+  bool bDoneSleeping = false;
+  if( sleepMemory.wakeCount > SKIP_TIMES ) {
+    sleepMemory.wakeCount = 1;
+    bDoneSleeping = true;
+  }
+
+  // write the new values to memory
+  sleepMemory.crc32 = calculateCRC32( ((uint8_t*)&sleepMemory) + 4, sizeof( sleepMemory ) - 4 );
+  ESP.rtcUserMemoryWrite((uint32_t)RTCMemOffset, (uint32_t*) &sleepMemory, sizeof(sleepMemory));
+
+  if (!bDoneSleeping) {
+#if DEBUG
+    Serial.println("Going back to sleep!");
+#endif
+    WiFi.disconnect( true );
+    delay(1);
+    goToSleep();
+  }
 #endif
 
   // PIN setup
@@ -143,8 +190,12 @@ void setup() {
   WiFi.disconnect( true );
   delay(1);
 
+  goToSleep();
+}
+
+void goToSleep() {
   // WAKE_RF_DISABLED to keep the WiFi radio disabled when we wake up
-  ESP.deepSleep(SLEEP_TIME, WAKE_RF_DISABLED);
+  ESP.deepSleep(SLEEP_TIME, WAKE_RF_DISABLED);  
 }
 
 void sendTelegramMessage(int moistureValueBefore, int moistureValueAfter) {
@@ -209,7 +260,7 @@ int getMoisture() {
   }
 
   output_value = output_value / N_READINGS;
-  output_value = map(output_value, 1024, 350, 0, 100);
+  output_value = map(output_value, 800, 340, 0, 100); // these values must be tuned based on the sensor and the wiring length
 
 #if DEBUG
   Serial.print("Moisture: ");
