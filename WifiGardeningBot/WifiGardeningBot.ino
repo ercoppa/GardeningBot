@@ -10,15 +10,19 @@
 
 #define DEBUG 0
 
+#define GARDEN_ID             "1"
+
+#define USE_WATERING_THRESHOLD 1
 #define SENSOR_INPUT          A0
 #define SENSOR_SWITCH         D5
 #define PUMP                  D6
+#define LED                   D4
 #define N_READINGS            2
-#define SKIP_TIMES            4           //
-#define SLEEP_TIME            (62e6 * 60) // 1 hour (max allowed is 71 mins)
-#define TELEGRAM_MAX_ATTEMPTS 4
-#define WATERING_TIME         40 // secs
-#define MOISTURE_THRESHOLD    25
+#define SKIP_TIMES            8           //
+#define SLEEP_TIME            (60e6 * 60L) // 1 hour (max allowed is 71 mins)
+#define TELEGRAM_MAX_ATTEMPTS 2
+#define WATERING_TIME         45L         // secs
+#define MOISTURE_THRESHOLD    45L
 
 // SSL client needed for both libraries
 WiFiClientSecure client;
@@ -54,16 +58,16 @@ void setup() {
   WiFi.forceSleepBegin();
   delay( 1 );
 
-#if 0
+#if USE_WATERING_THRESHOLD
   if(ESP.rtcUserMemoryRead((uint32_t) RTCMemOffset, (uint32_t*) &sleepMemory, sizeof(sleepMemory))) {
 
     uint32_t crc = calculateCRC32( ((uint8_t*)&sleepMemory) + 4, sizeof( sleepMemory ) - 4 );
- 
+
     if( crc == sleepMemory.crc32 )
       sleepMemory.wakeCount += 1;
-    else  
-      sleepMemory.wakeCount = SKIP_TIMES;   
-  
+    else
+      sleepMemory.wakeCount = SKIP_TIMES;
+
   } else
     sleepMemory.wakeCount = SKIP_TIMES;
 
@@ -93,6 +97,7 @@ void setup() {
 #endif
 
   // PIN setup
+  pinMode(LED, OUTPUT);
   pinMode(SENSOR_SWITCH, OUTPUT);
   digitalWrite(SENSOR_SWITCH, LOW);
   pinMode(PUMP, OUTPUT);
@@ -100,8 +105,12 @@ void setup() {
 
   // sensor reading
   int valueBefore = getMoisture();
+  
+  #if !USE_WATERING_THRESHOLD
   if (valueBefore < MOISTURE_THRESHOLD)
+  #endif
     activatePump();
+    
   int valueAfter = getMoisture();
 
   // Try to read WiFi settings from RTC memory
@@ -113,13 +122,13 @@ void setup() {
       rtcValid = true;
     }
   }
-  
+
   // Attempt to connect to Wifi network:
 #if DEBUG
   Serial.print("Connecting Wifi: ");
   Serial.println(WLAN_SSID);
 #endif
-  
+
   WiFi.forceSleepWake();
   delay( 1 );
   WiFi.persistent( false );
@@ -149,7 +158,7 @@ void setup() {
     Serial.print(".");
 #endif
 
-    if( retries == 100 ) {
+    if( retries == 20 ) {
       // Quick connect is not working, reset WiFi and try regular connection
       WiFi.disconnect();
       delay( 10 );
@@ -159,15 +168,17 @@ void setup() {
       delay( 10 );
       WiFi.begin( WLAN_SSID, WLAN_PASSWD );
     }
-    if( retries == 600 ) {
-      // Giving up after 30 seconds and going back to sleep
+    
+    if( retries == 100 ) {
+      // Giving up after X seconds and going back to sleep
       WiFi.disconnect( true );
-      delay( 1 );
+      delay(1);
       WiFi.mode( WIFI_OFF );
       ESP.deepSleep( SLEEP_TIME, WAKE_RF_DISABLED );
       return; // Not expecting this to be called, the previous call will never return.
     }
-    delay( 50 );
+    
+    delay(50);
     wifiStatus = WiFi.status();
   }
 
@@ -200,7 +211,7 @@ void goToSleep() {
 
 void sendTelegramMessage(int moistureValueBefore, int moistureValueAfter) {
 
-  String message = "Moisture value: ";
+  String message = "G" GARDEN_ID " - Moisture value: ";
   message.concat(moistureValueBefore);
   message.concat("% => ");
   message.concat(moistureValueAfter);
@@ -225,9 +236,11 @@ void activatePump() {
 #if DEBUG
   Serial.print("PUMP ON\n");
 #endif
+  digitalWrite(LED, LOW);
   digitalWrite(PUMP, HIGH);
   delay(1000 * WATERING_TIME);
   digitalWrite(PUMP, LOW);
+  digitalWrite(LED, HIGH);
 #if DEBUG
   Serial.print("PUMP OFF\n");
 #endif 
@@ -246,7 +259,7 @@ int getMoisture() {
       delay(2 * 1000);
 
     digitalWrite(SENSOR_SWITCH, HIGH);
-    delay(1000);
+    delay(2000);
     int raw_value = analogRead(SENSOR_INPUT);
     digitalWrite(SENSOR_SWITCH, LOW);
 
