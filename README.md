@@ -2,7 +2,7 @@
 Yet another gardening bot based on ESP8266 NodeMCU v3
 
 ## Requirements
-* The gardening system is designed for watering a single plant.
+* The gardening system should water a single plant.
 * When watering, a telegram message should be sent (using WiFi) to notify this event. Additionally, the telegram message should report the soil mosture level before and after watering. 
 * The system should water the plant every X hours. 
 * The system should be powered by a cheap USB power bank and last at least a couple of weeks.
