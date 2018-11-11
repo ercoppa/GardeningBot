@@ -2,7 +2,7 @@
 Yet another gardening bot based on ESP8266 NodeMCU v3
 
 ## Requirements
-* The gardening system is designed for watering a single plant.
+* The gardening system should water a single plant.
 * When watering, a telegram message should be sent (using WiFi) to notify this event. Additionally, the telegram message should report the soil mosture level before and after watering. 
 * The system should water the plant every X hours. 
 * The system should be powered by a cheap USB power bank and last at least a couple of weeks.
@@ -20,11 +20,20 @@ Yet another gardening bot based on ESP8266 NodeMCU v3
 * Multilayer Ceramic Capacitor 10pF + 100nF (€4 x 120 pcs on AliExpress) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/cap2.png" width="200px">
 * Water Tank 5L <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/tank.png" width="200px">
 * Kit DIY Micro Drip Irrigation System (€8 on Wish) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/irrigation.jpg" width="200px">
+* Clear Airtight Lunch Box (€2) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/lunch-box.png" width="200px">
 
 ## Software
 See source code `WifiGardeningBot.ino`
 
+## Result
+
+### System #1
+<img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G2.jpg" width="700px">
+
+### System #2
+<img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G1.jpg" width="700px">
+
 ## Notes
 * ESP8266 NodeMCU v3 has a lower power usage (~1.8mA) when in deep sleep mode compared to NodeMCU v1 and NodeMCU v2. On v1 and v2, you need to [remove the power regulator](https://tinker.yeoman.com.au/2016/05/29/running-nodemcu-on-a-battery-esp8266-low-power-consumption-revisited/) to get a small power usage in deep sleep. With a ~1.8mA current drain, you get more than 2 weeks when using a 2200mAh power bank.
-* [Soil Moisture Sensors](https://www.sparkfun.com/products/13322) that measure resistance give totally [unreliable readings](https://mtlynch.io/greenpithumb/) just after just 1-2 months. Avoid them. Capacitive soil sensors are better, but still sometime unreliable. After many and long experiments, I use capacitive sensors but only to get *feedback* about the soil moisture without using this data to decide whether it it the right time to activate the water pump. 
+* [Soil Moisture Sensors](https://www.sparkfun.com/products/13322) that measure resistance give totally [unreliable readings](https://mtlynch.io/greenpithumb/) just after 1-2 months. Avoid them. Capacitive soil sensors are better, but still sometimes unreliable. After many and long experiments, I have used capacitive sensors but only to get *feedback* (via telegram messages) about the soil moisture. The readings are **NOT** used by the system to decide whether it it the right time to activate the water pump. If want to have a system that waters a plant based on the soil mosture level then you need to buy reliable (=professional) but expensive sensors.
 * Finding (cheap) power banks that: (i) do not waste power (e.g., flashing LEDs) and (ii) keep working even with a very low current load is *really* hard. 
