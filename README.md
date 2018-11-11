@@ -28,10 +28,10 @@ See source code `WifiGardeningBot.ino`
 ## Result
 
 ### System #1
-<img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G2.jpg" width="500px">
+<img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G2.jpg" width="700px">
 
 ### System #2
-<img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G1.jpg" width="500px">
+<img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G1.jpg" width="700px">
 
 ## Notes
 * ESP8266 NodeMCU v3 has a lower power usage (~1.8mA) when in deep sleep mode compared to NodeMCU v1 and NodeMCU v2. On v1 and v2, you need to [remove the power regulator](https://tinker.yeoman.com.au/2016/05/29/running-nodemcu-on-a-battery-esp8266-low-power-consumption-revisited/) to get a small power usage in deep sleep. With a ~1.8mA current drain, you get more than 2 weeks when using a 2200mAh power bank.
