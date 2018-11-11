@@ -19,6 +19,7 @@ Yet another gardening bot based on ESP8266 NodeMCU v3
 * 2 x Aluminum electrolytic capacitor 470uF (€4 x 120 pcs on Ebay) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/cap1.png" width="200px">
 * Multilayer Ceramic Capacitor 10pF + 100nF (€4 x 120 pcs on AliExpress) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/cap2.png" width="200px">
 * Water Tank 5L <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/tank.png" width="200px">
+* Kit DIY Micro Drip Irrigation System (€8 on Wish) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/irrigation.jpg" width="200px">
 
 ## Software
 See source code `WifiGardeningBot.ino`
