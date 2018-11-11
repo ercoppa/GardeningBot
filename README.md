@@ -30,7 +30,7 @@ See source code `WifiGardeningBot.ino`
 ### System #1
 <img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G2.jpg" width="500px">
 
-### System #1
+### System #2
 <img src="https://github.com/ercoppa/GardeningBot/raw/master/images/G1.jpg" width="500px">
 
 ## Notes
