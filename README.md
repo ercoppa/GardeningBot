@@ -8,3 +8,11 @@ Yet another gardening bot based on ESP8266 NodeMCU v3
 * Capacitive Soil Moisture Sensor ($1.5 on AliExpress)
 * 2 x 1A 1000V Diode 1N4007 ($0.60 x 100 pcs on AliExpress)
 * 2 x BC337 BJT ($3 x 200 pcs on AliExpress)
+* 40x60mm FR-4 2.54mm Double Side Prototype PCB (€1 on Ebay)
+* 2 x Aluminum electrolytic capacitor 470uF (€4 x 120 pcs on Ebay)
+* Multilayer Ceramic Capacitor 10pF + 100nF (€4 x 120 pcs on AliExpress)
+
+## Software
+See source code `WifiGardeningBot.ino`
+
+## Notes
