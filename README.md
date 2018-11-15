@@ -21,6 +21,7 @@ Yet another gardening bot based on ESP8266 NodeMCU v3
 * Water Tank 5L <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/tank.png" width="200px">
 * Kit DIY Micro Drip Irrigation System (€8 on Wish) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/irrigation.jpg" width="200px">
 * Clear Airtight Lunch Box (€2) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/lunch-box.png" width="200px">
+* Jumper wires + resistors
 
 ## Software
 See source code `WifiGardeningBot.ino`
