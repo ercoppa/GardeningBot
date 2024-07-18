@@ -17,7 +17,7 @@ Yet another gardening bot based on ESP8266 NodeMCU v3
 * 2 x BC337 BJT ($3 x 200 pcs on AliExpress) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/bjt.png" width="200px">
 * 40x60mm FR-4 2.54mm Double Side Prototype PCB (€1 on Ebay) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/pcb.png" width="200px">
 * 2 x Aluminum electrolytic capacitor 470uF (€4 x 120 pcs on Ebay) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/cap1.png" width="200px">
-* Multilayer Ceramic Capacitor 10pF + 100nF (€4 x 120 pcs on AliExpress) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/cap2.png" width="200px">
+* Multilayer Ceramic Capacitor 10pF + 100nF  <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/cap2.png" width="200px">
 * Water Tank 5L <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/tank.png" width="200px">
 * Kit DIY Micro Drip Irrigation System (€8 on Wish) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/irrigation.jpg" width="200px">
 * Clear Airtight Lunch Box (€2) <br/><img src="https://github.com/ercoppa/GardeningBot/raw/master/images/lunch-box.png" width="200px">
